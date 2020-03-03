@@ -5,7 +5,7 @@ from constants import *
 KIPR=ctypes.CDLL("/usr/lib/libkipr.so")
 
 
-def move_to_black(speed, port, thresh=THRESH): 
+def move_to_black(speed, port=LINE_PORT_LEFT, thresh=THRESH): 
 	KIPR.mav(LMOTOR, speed)
   	KIPR.mav(RMOTOR, speed)
 	while KIPR.analog(port) < thresh:
@@ -120,7 +120,7 @@ def line_follow_dist(speed, dist):
 			KIPR.mav(LMOTOR, speed)
 			KIPR.mav(RMOTOR, -speed)
 		else:
-			KIPR.mav(LMOTOR, speed)
+			KIPR.mav(LMOTOR, speed+150)
 			KIPR.mav(RMOTOR, speed)
 	KIPR.ao()
 	print("Done following!!")
@@ -128,6 +128,23 @@ def line_follow_dist(speed, dist):
 def line_follow_bump(speed):
 	print("Line following!!")
 	while KIPR.digital(BUMP_PORT) == 0:
+		if KIPR.analog(LINE_PORT_LEFT) > THRESH+400:
+			KIPR.mav(LMOTOR, -speed)
+			KIPR.mav(RMOTOR, speed)
+		elif KIPR.analog(LINE_PORT_RIGHT) > THRESH+400:
+			KIPR.mav(LMOTOR, speed)
+			KIPR.mav(RMOTOR, -speed)
+		else:
+			KIPR.mav(LMOTOR, speed)
+			KIPR.mav(RMOTOR, speed)
+	KIPR.ao()
+	print("Done following!!")
+                
+def line_follow_sensors(speed):
+	print("Line following!!")
+	KIPR.cmpc(LMOTOR)
+	KIPR.cmpc(RMOTOR)
+	while KIPR.analog(LINE_PORT_LEFT) < THRESH or KIPR.analog(LINE_PORT_RIGHT) < THRESH:
 		if KIPR.analog(LINE_PORT_LEFT) > THRESH:
 			KIPR.mav(LMOTOR, -speed)
 			KIPR.mav(RMOTOR, speed)
@@ -135,7 +152,7 @@ def line_follow_bump(speed):
 			KIPR.mav(LMOTOR, speed)
 			KIPR.mav(RMOTOR, -speed)
 		else:
-			KIPR.mav(LMOTOR, speed)
+			KIPR.mav(LMOTOR, speed+150)
 			KIPR.mav(RMOTOR, speed)
 	KIPR.ao()
 	print("Done following!!")

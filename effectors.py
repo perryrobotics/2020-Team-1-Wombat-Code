@@ -24,13 +24,14 @@ def arm_back(step):
         
 def arm_forward(step):
 	move_servo_slow(ARM_SERVO,ARM_FORWARD, step)
+	#ove_servo_slow(ELBOW_SERVO,ELBOW_FORWARD, step)
         
 def elbow_down(step):
 	move_servo_slow(ELBOW_SERVO,ELBOW_DOWN, step)
         
 def elbow_forward(step):
 	move_servo_slow(ELBOW_SERVO,ELBOW_FORWARD, step)
-        
+	       
 def elbow_up(step):
 	move_servo_slow(ELBOW_SERVO,ELBOW_UP, step)
         
